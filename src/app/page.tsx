@@ -12,12 +12,13 @@ interface TripActivity {
   images: string[];
 }
 
-// ✨ [NEW] 여행의 핵심 하이라이트 정의 (여기서 수정하세요!)
-const highlights = [
-  { icon: "✈️", title: "설레는 출발", desc: "인천공항 -> 푸꾸옥 도착" },
-  { icon: "🏨", title: "쉐라톤 입성", desc: "럭셔리 리조트 휴식 시작" },
-  { icon: "🎡", title: "빈원더스 데이", desc: "놀이공원과 사파리 탐험" },
-  { icon: "🌅", title: "선셋과 마무", desc: "아름다운 해변과 귀국" },
+// ✨ [수정됨] 5일간의 여정 요약 (여기 내용을 수정하면 화면에 반영됩니다!)
+const journeySummary = [
+  { day: "Day 1", title: "설레는 출발", desc: "인천 ✈️ 푸꾸옥" },
+  { day: "Day 2", title: "리조트 힐링", desc: "수영 & 호캉스" },
+  { day: "Day 3", title: "빈원더스", desc: "놀이공원 & 사파리" },
+  { day: "Day 4", title: "남부 투어", desc: "선셋 타운 & 해변" },
+  { day: "Day 5", title: "컴백 홈", desc: "푸꾸옥 ✈️ 인천" },
 ];
 
 export default function Home() {
@@ -33,7 +34,7 @@ export default function Home() {
 
   const dates = Object.keys(groupedData).sort();
 
-  // 스크롤 인터랙션 (기존과 동일)
+  // 스크롤 인터랙션
   useEffect(() => {
     if (dates.length > 0 && !activeDay) setActiveDay(dates[0]);
 
@@ -43,7 +44,6 @@ export default function Home() {
         const element = document.getElementById(`date-${date}`);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // 헤더 영역을 지나서 실제 일정이 화면 상단에 올 때 감지
           if (rect.top >= navHeight && rect.top <= navHeight + 400) {
             setActiveDay(date);
             break;
@@ -59,7 +59,6 @@ export default function Home() {
     setActiveDay(date);
     const element = document.getElementById(`date-${date}`);
     if (element) {
-      // 상단 헤더+메뉴 높이만큼 오프셋 계산
       const menuOffset = 160;
       const y = element.getBoundingClientRect().top + window.scrollY - menuOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
@@ -67,56 +66,81 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen font-sans text-gray-100 relative">
+    <div className="min-h-screen font-sans text-gray-100 relative selection:bg-[#d4af37] selection:text-black">
 
-      {/* ✨ [NEW] 배경 이미지 레이어 (고정됨) */}
+      {/* ✨ [수정됨] 배경 이미지 (bg-sheraton.jpg 사용) */}
       <div className="fixed inset-0 z-[-1]">
-        {/* 팁: public/images/bg-sheraton.jpg 파일을 넣으면 그 사진이 배경이 됩니다.
-          지금은 임시로 온라인 이미지를 사용합니다.
-        */}
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-1000"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            // 여기에 여러분의 멋진 사진 경로를 넣으세요: url('/images/bg-sheraton.jpg')
-            backgroundImage: `url('https://images.unsplash.com/photo-1582653291997-079a1c04c561?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')`
+            // 꾹꾹이님이 넣으신 파일을 바라보도록 수정했습니다!
+            backgroundImage: `url('/images/bg-sheraton.jpg')`
           }}
         />
-        {/* 어두운 오버레이 (글씨 잘 보이게) */}
-        <div className="absolute inset-0 bg-[#0a1120]/85 backdrop-blur-[2px]" />
+        {/* 사진이 너무 밝을까봐 어둡게 눌러주는 막 (투명도 70%) */}
+        <div className="absolute inset-0 bg-[#0a1120]/70 backdrop-blur-[2px]" />
       </div>
 
-
-      {/* 1. 히어로 섹션 (제목 + 핵심 하이라이트) */}
-      <header className="pt-24 pb-20 px-4 text-center relative overflow-hidden">
-        <div className="max-w-4xl mx-auto relative z-10">
-          <p className="text-[#d4af37] tracking-[0.3em] text-sm font-medium mb-4 uppercase animate-fade-in-down">
+      {/* 1. 히어로 섹션 (제목 + 여정 흐름도) */}
+      <header className="pt-24 pb-16 px-4 text-center relative overflow-hidden">
+        <div className="max-w-5xl mx-auto relative z-10">
+          <p className="text-[#d4af37] tracking-[0.3em] text-xs md:text-sm font-bold mb-4 uppercase animate-fade-in-down">
             2026 Family Memorial Trip
           </p>
-          <h1 className="text-4xl md:text-6xl font-serif text-white mb-12 font-bold leading-tight animate-fade-in-up">
+          <h1 className="text-4xl md:text-6xl font-serif text-white mb-12 font-bold leading-tight animate-fade-in-up drop-shadow-2xl">
             푸꾸옥 쉐라톤<br className="md:hidden" /> 롱비치 여행
           </h1>
 
-          {/* ✨ [NEW] 핵심 하이라이트 오버뷰 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 border-t border-gray-800/50 pt-10 animate-fade-in">
-            {highlights.map((item, index) => (
-              <div key={index} className="flex flex-col items-center text-center group">
-                <div className="w-12 h-12 md:w-14 md:h-14 bg-[#d4af37]/10 rounded-full flex items-center justify-center text-2xl md:text-3xl mb-3 group-hover:scale-110 transition-transform group-hover:bg-[#d4af37]/20 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
-                  {item.icon}
+          {/* ✨ [NEW] 5일간의 여정 흐름도 (화살표 연결) */}
+          <div className="mt-16 relative">
+            {/* 데스크톱용 가로 연결선 */}
+            <div className="hidden md:block absolute top-6 left-10 right-10 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37]/50 to-transparent -z-10"></div>
+
+            <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
+              {journeySummary.map((item, index) => (
+                <div key={index} className="relative flex flex-col items-center group w-full md:w-auto">
+
+                  {/* 모바일용 세로 연결선 (마지막 아이템 제외) */}
+                  {index < journeySummary.length - 1 && (
+                    <div className="md:hidden absolute top-12 bottom-[-2rem] w-0.5 bg-[#d4af37]/30"></div>
+                  )}
+
+                  {/* 날짜 원형 뱃지 */}
+                  <button
+                    onClick={() => dates[index] && scrollToDate(dates[index])}
+                    className="w-12 h-12 rounded-full bg-[#0a1120] border-2 border-[#d4af37] flex items-center justify-center text-[#d4af37] font-bold text-sm shadow-[0_0_15px_rgba(212,175,55,0.3)] group-hover:bg-[#d4af37] group-hover:text-black transition-all duration-300 z-10 cursor-pointer"
+                  >
+                    {index + 1}
+                  </button>
+
+                  {/* 텍스트 정보 */}
+                  <div className="mt-4 text-center bg-[#0a1120]/60 p-3 rounded-lg backdrop-blur-sm border border-gray-700/50 w-40 hover:border-[#d4af37]/50 transition-colors">
+                    <h3 className="text-white font-bold text-lg mb-1">{item.title}</h3>
+                    <p className="text-gray-400 text-xs">{item.desc}</p>
+                  </div>
+
+                  {/* 데스크톱용 화살표 (오른쪽) */}
+                  {index < journeySummary.length - 1 && (
+                    <div className="hidden md:block absolute top-5 -right-[50%] transform translate-x-1/2 text-[#d4af37]/50 text-xl">
+                      ➤
+                    </div>
+                  )}
+                  {/* 모바일용 화살표 (아래쪽) */}
+                  {index < journeySummary.length - 1 && (
+                    <div className="md:hidden absolute -bottom-6 text-[#d4af37]/50 text-xl rotate-90 z-10">
+                      ➤
+                    </div>
+                  )}
                 </div>
-                <h3 className="text-white font-medium mb-1 text-base md:text-lg">{item.title}</h3>
-                <p className="text-gray-400 text-xs md:text-sm">{item.desc}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-
-        {/* 장식용 배경 요소 */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#d4af37]/5 blur-[120px] rounded-full pointer-events-none -z-10"></div>
       </header>
 
 
-      {/* 2. 상단 고정 내비게이션 (Sticky Nav) */}
-      <nav className="sticky top-0 z-50 bg-[#0a1120]/80 backdrop-blur-md border-b border-[#d4af37]/20 shadow-lg">
+      {/* 2. 상단 고정 내비게이션 */}
+      <nav className="sticky top-0 z-50 bg-[#0a1120]/85 backdrop-blur-md border-b border-[#d4af37]/20 shadow-lg">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex justify-start md:justify-center space-x-2 md:space-x-4 py-4 overflow-x-auto whitespace-nowrap scrollbar-hide mask-image-edges">
             {dates.map((date, index) => (
@@ -135,18 +159,19 @@ export default function Home() {
         </div>
       </nav>
 
+
       {/* 3. 메인 타임라인 콘텐츠 */}
       <main className="max-w-3xl mx-auto px-4 py-20">
         <div className="relative">
-          {/* 수직선 (그라데이션 적용) */}
+          {/* 수직선 */}
           <div className="absolute left-4 md:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#d4af37]/50 to-transparent" />
 
           {dates.map((date, index) => (
             <div key={date} id={`date-${date}`} className="mb-32 relative pl-12 md:pl-24 scroll-mt-40">
 
-              {/* 날짜 표시 (동그라미) */}
+              {/* 날짜 표시 */}
               <div className="absolute left-0 md:left-4 -translate-x-1/2 flex flex-col items-center">
-                <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-[#0a1120] border-2 border-[#d4af37] flex items-center justify-center text-[#d4af37] font-bold text-xs md:text-base shadow-[0_0_20px_rgba(212,175,55,0.3)] z-10">
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-[#0a1120] border-2 border-[#d4af37] flex items-center justify-center text-[#d4af37] font-bold text-xs md:text-base shadow-[0_0_20px_rgba(212,175,55,0.3)] z-10 bg-cover" style={{ backgroundImage: "url('/images/bg-sheraton.jpg')", backgroundBlendMode: "multiply", backgroundColor: "#000" }}>
                   {index + 1}
                 </div>
               </div>
@@ -159,16 +184,17 @@ export default function Home() {
                 </h2>
               </div>
 
-              {/* 해당 날짜의 일정들 */}
+              {/* 일정 리스트 */}
               <div className="space-y-16">
                 {groupedData[date].map((item: TripActivity, i: number) => (
-                  <div key={i} className="relative group bg-[#111a2d]/40 p-6 rounded-2xl border border-gray-800/50 backdrop-blur-sm hover:border-[#d4af37]/30 transition-all duration-500 hover:bg-[#111a2d]/60 hover:shadow-[0_5px_20px_rgba(0,0,0,0.2)]">
-                    {/* 타임라인 작은 점 */}
-                    <div className="absolute -left-[3.4rem] md:-left-[6.4rem] top-8 w-3 h-3 bg-gray-600 rounded-full border-2 border-[#0a1120] group-hover:bg-[#d4af37] group-hover:border-[#d4af37] group-hover:scale-150 transition-all duration-300 shadow-[0_0_10px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_15px_rgba(212,175,55,0.5)]" />
+                  <div key={i} className="relative group bg-[#111a2d]/60 p-6 rounded-2xl border border-gray-800 backdrop-blur-md hover:border-[#d4af37]/50 transition-all duration-500 hover:bg-[#162032]/80 shadow-lg">
+
+                    {/* 타임라인 점 */}
+                    <div className="absolute -left-[3.4rem] md:-left-[6.4rem] top-8 w-3 h-3 bg-gray-500 rounded-full border-2 border-[#0a1120] group-hover:bg-[#d4af37] group-hover:border-[#d4af37] group-hover:scale-150 transition-all duration-300" />
 
                     {/* 시간 및 제목 */}
                     <div className="mb-5">
-                      <div className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#d4af37]/10 text-[#d4af37] mb-3 border border-[#d4af37]/20 shadow-sm">
+                      <div className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-[#d4af37]/10 text-[#d4af37] mb-3 border border-[#d4af37]/20">
                         ⏰ {item.start} - {item.end}
                       </div>
                       <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-[#d4af37] transition-colors">
@@ -180,12 +206,11 @@ export default function Home() {
                     {item.images && item.images.length > 0 && (
                       <div className="grid grid-cols-2 gap-3 mt-5">
                         {item.images.map((img, imgIdx) => (
-                          <div key={imgIdx} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gray-900/50 shadow-md group-hover:shadow-[#d4af37]/20 transition-all duration-500">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none"></div>
+                          <div key={imgIdx} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gray-900 shadow-inner group-hover:shadow-[#d4af37]/10 transition-all duration-500">
                             <img
                               src={img}
                               alt={`Travel photo ${imgIdx}`}
-                              className="object-cover w-full h-full hover:scale-105 transition-transform duration-700"
+                              className="object-cover w-full h-full hover:scale-110 transition-transform duration-700"
                               loading="lazy"
                             />
                           </div>
@@ -201,7 +226,7 @@ export default function Home() {
       </main>
 
       {/* 푸터 */}
-      <footer className="text-center py-12 text-gray-500 text-sm border-t border-gray-800/50 mt-20 relative z-10 bg-[#0a1120]/80 backdrop-blur-md">
+      <footer className="text-center py-12 text-gray-500 text-sm border-t border-gray-800/50 mt-20 relative z-10 bg-[#0a1120]/90">
         <p className="mb-2">푸꾸옥 쉐라톤 롱비치 가족여행</p>
         <p className="opacity-70">Created with ❤️ by Dad • 2026</p>
       </footer>
