@@ -12,13 +12,13 @@ interface TripActivity {
   images: string[];
 }
 
-// ✨ [수정됨] 5일간의 여정 요약 (여기 내용을 수정하면 화면에 반영됩니다!)
+// ✨ [수정완료] 꾹꾹이님이 알려주신 정확한 5일 여정!
 const journeySummary = [
-  { day: "Day 1", title: "설레는 출발", desc: "인천 ✈️ 푸꾸옥" },
-  { day: "Day 2", title: "리조트 힐링", desc: "수영 & 호캉스" },
-  { day: "Day 3", title: "빈원더스", desc: "놀이공원 & 사파리" },
-  { day: "Day 4", title: "남부 투어", desc: "선셋 타운 & 해변" },
-  { day: "Day 5", title: "컴백 홈", desc: "푸꾸옥 ✈️ 인천" },
+  { day: "Day 1", title: "설레는 출발", desc: "인천 ✈️ 푸꾸옥 도착" },
+  { day: "Day 2", title: "빈원더스 데이", desc: "체크인, 빈원더스 & 그랜드월드" },
+  { day: "Day 3", title: "남부 투어", desc: "혼똔섬 케이블카 & 워터파크" },
+  { day: "Day 4", title: "리조트 액티비티", desc: "코코넛 따기 & 파라세일링" },
+  { day: "Day 5", title: "리조트 힐링", desc: "수영, 체크아웃, 호국사 관광" },
 ];
 
 export default function Home() {
@@ -68,16 +68,16 @@ export default function Home() {
   return (
     <div className="min-h-screen font-sans text-gray-100 relative selection:bg-[#d4af37] selection:text-black">
 
-      {/* ✨ [수정됨] 배경 이미지 (bg-sheraton.jpg 사용) */}
+      {/* ✨ 배경 이미지 설정 (파일이 있어야 나옵니다!) */}
       <div className="fixed inset-0 z-[-1]">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            // 꾹꾹이님이 넣으신 파일을 바라보도록 수정했습니다!
-            backgroundImage: `url('/images/bg-sheraton.jpg')`
+            // public/images/bg-sheraton.jpg 파일을 바라봅니다.
+            backgroundImage: "url('/images/bg-sheraton.jpg')"
           }}
         />
-        {/* 사진이 너무 밝을까봐 어둡게 눌러주는 막 (투명도 70%) */}
+        {/* 어둡게 눌러주는 막 (글씨 잘 보이게) */}
         <div className="absolute inset-0 bg-[#0a1120]/70 backdrop-blur-[2px]" />
       </div>
 
@@ -91,7 +91,7 @@ export default function Home() {
             푸꾸옥 쉐라톤<br className="md:hidden" /> 롱비치 여행
           </h1>
 
-          {/* ✨ [NEW] 5일간의 여정 흐름도 (화살표 연결) */}
+          {/* 5일간의 여정 흐름도 (업데이트됨) */}
           <div className="mt-16 relative">
             {/* 데스크톱용 가로 연결선 */}
             <div className="hidden md:block absolute top-6 left-10 right-10 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37]/50 to-transparent -z-10"></div>
@@ -114,9 +114,9 @@ export default function Home() {
                   </button>
 
                   {/* 텍스트 정보 */}
-                  <div className="mt-4 text-center bg-[#0a1120]/60 p-3 rounded-lg backdrop-blur-sm border border-gray-700/50 w-40 hover:border-[#d4af37]/50 transition-colors">
+                  <div className="mt-4 text-center bg-[#0a1120]/60 p-3 rounded-lg backdrop-blur-sm border border-gray-700/50 w-44 hover:border-[#d4af37]/50 transition-colors">
                     <h3 className="text-white font-bold text-lg mb-1">{item.title}</h3>
-                    <p className="text-gray-400 text-xs">{item.desc}</p>
+                    <p className="text-gray-400 text-xs break-keep">{item.desc}</p>
                   </div>
 
                   {/* 데스크톱용 화살표 (오른쪽) */}
@@ -148,8 +148,8 @@ export default function Home() {
                 key={date}
                 onClick={() => scrollToDate(date)}
                 className={`px-5 py-2.5 rounded-full text-sm md:text-base transition-all duration-300 font-medium flex-shrink-0 ${activeDay === date
-                    ? 'bg-[#d4af37] text-[#0a1120] font-bold shadow-[0_0_15px_rgba(212,175,55,0.4)] transform scale-105'
-                    : 'bg-gray-800/40 text-gray-300 hover:bg-gray-700 hover:text-white hover:shadow-[0_0_10px_rgba(255,255,255,0.1)]'
+                  ? 'bg-[#d4af37] text-[#0a1120] font-bold shadow-[0_0_15px_rgba(212,175,55,0.4)] transform scale-105'
+                  : 'bg-gray-800/40 text-gray-300 hover:bg-gray-700 hover:text-white hover:shadow-[0_0_10px_rgba(255,255,255,0.1)]'
                   }`}
               >
                 Day {index + 1}
